@@ -13,12 +13,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "product_details")
 public class ProductDetail {
-	@Override
-	public String toString() {
-		return "ProductDetail [productId=" + productId + ", productName=" + productName + ", manufacturingDate="
-				+ manufacturingDate + ", expiryDate=" + expiryDate + ", category=" + category + ", addedAt=" + addedAt
-				+ "]";
-	}
+	
 
 	@Column(name = "p_id")
 	@Id
@@ -28,6 +23,15 @@ public class ProductDetail {
 	private String productName;
 	@Column(name = "man_date")
 	private LocalDate manufacturingDate;
+	
+	@Column(name = "exp_date")
+	private LocalDate expiryDate;
+
+	private String category;
+
+	private LocalDateTime addedAt;
+	
+	private Integer quantity;
 
 	public Integer getProductId() {
 		return productId;
@@ -77,13 +81,22 @@ public class ProductDetail {
 		this.addedAt = addedAt;
 	}
 
-	@Column(name = "exp_date")
-	private LocalDate expiryDate;
+	public Integer getQuantity() {
+		return quantity;
+	}
 
-	private String category;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	
+	@Override
+	public String toString() {
+		return "ProductDetail [productId=" + productId + ", productName=" + productName + ", manufacturingDate="
+				+ manufacturingDate + ", expiryDate=" + expiryDate + ", category=" + category + ", addedAt=" + addedAt
+				+ "]";
+	}
 
-	private LocalDateTime addedAt;
-
+	
 }
 //primary key generation startagies
 // identity

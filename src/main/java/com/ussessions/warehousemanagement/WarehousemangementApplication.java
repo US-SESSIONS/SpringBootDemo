@@ -25,25 +25,61 @@ public class WarehousemangementApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//addProduct();
-		
-		viewProduct();
+		// addProduct();
+
+		// viewProduct();
+		// updateProduct();
+		deleteProduct();
+	}
+
+	private void deleteProduct() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter product id");
+		int prodId = sc.nextInt();
+		// auto boxing
+		// primitive value->Wrapper class type
+		try {
+			productService.deleteProduct(prodId);
+			System.out.println("product with product id : " + prodId + "is deleted successfully");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+	private void updateProduct() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter product id");
+		int prodId = sc.nextInt();
+		System.out.println("enter quantity");
+		int quantity = sc.nextInt();
+		// auto boxing
+		// primitive value->Wrapper class type
+		try {
+			Integer newQuantity = productService.updateProduct(prodId, quantity);
+			System.out.println("product with product id : " + prodId + "is updated with new quantity " + newQuantity);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	private void viewProduct() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter product id");
-		int prodId=sc.nextInt();
-		//auto boxing
-		//primitive value->Wrapper class type
+		int prodId = sc.nextInt();
+		// auto boxing
+		// primitive value->Wrapper class type
 		try {
-		ProductDetail product=	productService.findProduct(prodId);
-		System.out.println("product with product id : "+prodId+"is "+product);
+			ProductDetail product = productService.findProduct(prodId);
+			System.out.println("product with product id : " + prodId + "is " + product);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
 		}
-		
+
 	}
 
 	private void addProduct() {

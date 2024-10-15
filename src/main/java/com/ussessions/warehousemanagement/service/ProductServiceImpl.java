@@ -17,7 +17,7 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepository;
 
 	@Override
-	public void addProduct(ProductDTO product) {
+	public Integer addProduct(ProductDTO product) {
 
 		ProductDetail newProduct = new ProductDetail();
 
@@ -27,17 +27,58 @@ public class ProductServiceImpl implements ProductService {
 		newProduct.setProductName(product.getProductName());
 		newProduct.setAddedAt(LocalDateTime.now());
 
-		productRepository.save(newProduct);
+		ProductDetail addededProduct = productRepository.save(newProduct);
+		return addededProduct.getProductId();
 
 	}
 
 	@Override
 	public ProductDetail findProduct(Integer productId) throws Exception {
-
+		// select * from produt table where pid=?
 		Optional<ProductDetail> optProduct = productRepository.findById(productId);
 
 		ProductDetail product = optProduct.orElseThrow(() -> new Exception("ProductNot found with id :" + productId));
 		return product;
+	}
+
+	@Override
+	public Integer updateProduct(Integer productId, Integer newQuantity) throws Exception {
+		// ProductDetail product= findProduct(productId);
+
+		Optional<ProductDetail> optProduct = productRepository.findById(productId);
+
+		if (optProduct.isPresent()) {
+			ProductDetail product = optProduct.get();
+
+			System.out.println("existing quantity " + product.getQuantity());
+
+			product.setQuantity(newQuantity);
+
+			// product.setProductId(null);
+
+			ProductDetail updatedProduct = productRepository.save(product);
+			return updatedProduct.getQuantity();
+
+		} else {
+			throw new Exception("ProductNot found with id :" + productId);
+		}
+
+	}
+
+	@Override
+	public void deleteProduct(Integer productId) throws Exception {
+
+		Optional<ProductDetail> optProduct = productRepository.findById(productId);
+		ProductDetail productDetail = optProduct
+				.orElseThrow(() -> new Exception("ProductNot found with id :" + productId));
+
+		// based on PK ->deletebyId
+
+
+		//productRepository.deleteById(productDetail.getProductId());
+		// based on entity object delete
+		productRepository.delete(productDetail);
+
 	}
 
 }
