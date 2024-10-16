@@ -1,5 +1,7 @@
 package com.ussessions.warehousemanagement.service;
 
+import java.util.List;
+
 import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
 
@@ -11,4 +13,6 @@ public interface ProductService {
 	public Integer updateProduct(Integer productId, Integer newQuantity) throws Exception;
 
 	public void deleteProduct(Integer product) throws Exception;
+
+	List<ProductDTO> viewProductsWithProductName(String name);
 }

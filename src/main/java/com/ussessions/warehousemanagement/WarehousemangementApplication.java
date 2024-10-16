@@ -2,6 +2,7 @@ package com.ussessions.warehousemanagement;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,27 @@ public class WarehousemangementApplication implements CommandLineRunner {
 
 		// viewProduct();
 		// updateProduct();
-		deleteProduct();
+		// deleteProduct();
+		searchProducts();
+	}
+
+	private void searchProducts() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter product Name");
+		String prodName = sc.next();
+		// auto boxing
+		// primitive value->Wrapper class type
+		try {
+			List<ProductDTO> products = productService.viewProductsWithProductName(prodName);
+			System.out.println(products.size()+" products found for search keyword");
+			for (ProductDTO dto : products) {
+				System.out.println(dto);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private void deleteProduct() {

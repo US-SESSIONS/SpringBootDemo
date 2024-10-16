@@ -21,6 +21,7 @@ public class ProductDetail {
 	private Integer productId;
 	@Column(name = "p_name")
 	private String productName;
+	
 	@Column(name = "man_date")
 	private LocalDate manufacturingDate;
 	

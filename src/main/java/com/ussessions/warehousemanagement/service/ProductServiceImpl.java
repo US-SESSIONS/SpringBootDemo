@@ -1,6 +1,8 @@
 package com.ussessions.warehousemanagement.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,11 +76,33 @@ public class ProductServiceImpl implements ProductService {
 
 		// based on PK ->deletebyId
 
-
-		//productRepository.deleteById(productDetail.getProductId());
+		// productRepository.deleteById(productDetail.getProductId());
 		// based on entity object delete
 		productRepository.delete(productDetail);
 
+	}
+
+	@Override
+	public List<ProductDTO> viewProductsWithProductName(String name) {
+		List<ProductDetail> products = productRepository.findByProductName(name);
+		// create List<ProductDTO>
+		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
+
+		for (ProductDetail product : products) {
+
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setpId(product.getProductId());
+			productDTO.setAddedAt(product.getAddedAt());
+			productDTO.setCategory(product.getCategory());
+			productDTO.setProductName(product.getProductName());
+			productDTO.setExpDate(product.getExpiryDate());
+			productDTO.setManDate(product.getManufacturingDate());
+			productDTO.setQuantity(product.getQuantity());
+			productDTOs.add(productDTO);
+
+		}
+
+		return productDTOs;
 	}
 
 }
