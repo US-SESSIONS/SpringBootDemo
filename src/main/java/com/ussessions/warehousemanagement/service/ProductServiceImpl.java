@@ -12,7 +12,10 @@ import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
 import com.ussessions.warehousemanagement.repository.ProductRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
@@ -103,6 +106,37 @@ public class ProductServiceImpl implements ProductService {
 		}
 
 		return productDTOs;
+	}
+
+	@Override
+	public List<ProductDTO> searchProducts(String keyword) {
+		List<ProductDetail> repoProducts = productRepository.findByProductNameLikeOrCategoryLikePositionalParam(keyword,
+				keyword);
+		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
+
+		for (ProductDetail product : repoProducts) {
+
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setpId(product.getProductId());
+			productDTO.setAddedAt(product.getAddedAt());
+			productDTO.setCategory(product.getCategory());
+			productDTO.setProductName(product.getProductName());
+			productDTO.setExpDate(product.getExpiryDate());
+			productDTO.setManDate(product.getManufacturingDate());
+			productDTO.setQuantity(product.getQuantity());
+			productDTOs.add(productDTO);
+
+		}
+
+		return productDTOs;
+	}
+
+	@Override
+	@Transactional(rollbackOn = {Exception.class})
+	public void deleteProductWithQuery(Integer product) throws Exception {
+		productRepository.deleteProductBasedOnPK(product);
+		//throw new RuntimeException("created exception to check the transcational behavior");
+		throw new Exception("created exception to check the transcational behavior");
 	}
 
 }

@@ -15,4 +15,8 @@ public interface ProductService {
 	public void deleteProduct(Integer product) throws Exception;
 
 	List<ProductDTO> viewProductsWithProductName(String name);
+	
+	List<ProductDTO> searchProducts(String keyword);
+	
+	public void deleteProductWithQuery(Integer product) throws Exception;
 }

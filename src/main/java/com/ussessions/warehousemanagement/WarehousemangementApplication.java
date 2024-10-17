@@ -30,8 +30,29 @@ public class WarehousemangementApplication implements CommandLineRunner {
 
 		// viewProduct();
 		// updateProduct();
-		// deleteProduct();
-		searchProducts();
+		 deleteProduct();
+		//searchProducts();
+		//searchByKeyword();
+	}
+
+	private void searchByKeyword() {
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter keyword");
+		String keyword = sc.next();
+		// auto boxing
+		// primitive value->Wrapper class type
+		try {
+			List<ProductDTO> products = productService.searchProducts(keyword);
+			System.out.println(products.size()+" products found for search keyword");
+			for (ProductDTO dto : products) {
+				System.out.println(dto);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private void searchProducts() {
@@ -53,18 +74,20 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		}
 	}
 
-	private void deleteProduct() {
+	private void deleteProduct() throws Exception {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter product id");
 		int prodId = sc.nextInt();
 		// auto boxing
 		// primitive value->Wrapper class type
 		try {
-			productService.deleteProduct(prodId);
+			//productService.deleteProduct(prodId);
+			productService.deleteProductWithQuery(prodId);
 			System.out.println("product with product id : " + prodId + "is deleted successfully");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
+			//throw e;
 		}
 
 	}
