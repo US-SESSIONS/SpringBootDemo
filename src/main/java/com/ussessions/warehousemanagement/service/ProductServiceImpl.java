@@ -87,7 +87,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> viewProductsWithProductName(String name) {
-		List<ProductDetail> products = productRepository.findByProductName(name);
+		// below method is used to do transaction based on method name apporach
+		// List<ProductDetail> products = productRepository.findByProductName(name);
+
+		
+		//below method is for doing transaction based on product name using the named query approach
+		List<ProductDetail> products = productRepository.findByProdName(name);
 		// create List<ProductDTO>
 		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
 
@@ -132,10 +137,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = {Exception.class})
+	@Transactional(rollbackOn = { Exception.class })
 	public void deleteProductWithQuery(Integer product) throws Exception {
 		productRepository.deleteProductBasedOnPK(product);
-		//throw new RuntimeException("created exception to check the transcational behavior");
+		// throw new RuntimeException("created exception to check the transcational
+		// behavior");
 		throw new Exception("created exception to check the transcational behavior");
 	}
 

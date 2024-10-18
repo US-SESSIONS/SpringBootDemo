@@ -30,8 +30,8 @@ public class WarehousemangementApplication implements CommandLineRunner {
 
 		// viewProduct();
 		// updateProduct();
-		 deleteProduct();
-		//searchProducts();
+		 //deleteProduct();
+		searchProducts();
 		//searchByKeyword();
 	}
 

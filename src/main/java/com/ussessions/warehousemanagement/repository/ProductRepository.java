@@ -58,7 +58,13 @@ public interface ProductRepository extends JpaRepository<ProductDetail, Integer>
 
 	@Query(value = "delete from product_details where p_id=?1", nativeQuery = true)
 	@Modifying
-	//@Transactional
-	//begin transaction commit transaction close transacton
+	// @Transactional
+	// begin transaction commit transaction close transacton
 	public void deleteProductBasedOnPK(Integer pk);
+
+	//List<ProductDetail> findByProdName(@Param("name") String name);
+	
+	//above method is for the named query named paramterer approach
+	//this is for the named query positioanal parameter approach
+	List<ProductDetail> findByProdName( String name);
 }
