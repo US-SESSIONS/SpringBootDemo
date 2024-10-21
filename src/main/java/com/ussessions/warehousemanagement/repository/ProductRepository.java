@@ -57,6 +57,8 @@ public interface ProductRepository extends JpaRepository<ProductDetail, Integer>
 	
 	
 	public List<ProductDetail> fetchBasedOnExpDatePositionalParam(LocalDate date);
+	
+	
 
 	@Query(value = "delete from product_details where p_id=?1", nativeQuery = true)
 	@Modifying
