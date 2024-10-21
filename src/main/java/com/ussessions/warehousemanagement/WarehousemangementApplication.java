@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
+import com.ussessions.warehousemanagement.service.KYCDocumentService;
+import com.ussessions.warehousemanagement.service.KycDocumentServiceImpl;
 import com.ussessions.warehousemanagement.service.ProductService;
+import com.ussessions.warehousemanagement.service.exception.SellerNotFoundException;
 
 @SpringBootApplication
 public class WarehousemangementApplication implements CommandLineRunner {
@@ -21,22 +25,46 @@ public class WarehousemangementApplication implements CommandLineRunner {
 	private ProductService productService;
 
 	public static void main(String[] args) {
-		SpringApplication.run(WarehousemangementApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(WarehousemangementApplication.class, args);
+
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		// addProduct();
+		//addProduct();
 
 		// viewProduct();
 		// updateProduct();
-		 //deleteProduct();
-		searchProducts();
-		//searchByKeyword();
+		// deleteProduct();
+		// searchProducts();
+		// searchByKeyword();
+		 findBySellerId();
+	}
+
+	private void findBySellerId() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter seller id");
+		int sellerId = sc.nextInt();
+		// auto boxing
+		// primitive value->Wrapper class type
+		try {
+			// productService.deleteProduct(prodId);
+			List<ProductDetail> products = productService.findBySellerId(sellerId);
+			if (products != null) {
+				for (ProductDetail product : products) {
+					System.out.println(product);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			// throw e;
+		}
+
 	}
 
 	private void searchByKeyword() {
-		
+
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter keyword");
 		String keyword = sc.next();
@@ -44,7 +72,7 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		// primitive value->Wrapper class type
 		try {
 			List<ProductDTO> products = productService.searchProducts(keyword);
-			System.out.println(products.size()+" products found for search keyword");
+			System.out.println(products.size() + " products found for search keyword");
 			for (ProductDTO dto : products) {
 				System.out.println(dto);
 			}
@@ -63,7 +91,7 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		// primitive value->Wrapper class type
 		try {
 			List<ProductDTO> products = productService.viewProductsWithProductName(prodName);
-			System.out.println(products.size()+" products found for search keyword");
+			System.out.println(products.size() + " products found for search keyword");
 			for (ProductDTO dto : products) {
 				System.out.println(dto);
 			}
@@ -81,13 +109,13 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		// auto boxing
 		// primitive value->Wrapper class type
 		try {
-			//productService.deleteProduct(prodId);
+			// productService.deleteProduct(prodId);
 			productService.deleteProductWithQuery(prodId);
 			System.out.println("product with product id : " + prodId + "is deleted successfully");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
-			//throw e;
+			// throw e;
 		}
 
 	}
@@ -146,7 +174,12 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		product.setExpDate(edt);
 		product.setManDate(mdt);
 		product.setProductName(pname);
-
-		productService.addProduct(product);
+		System.out.println("enter sellerId");
+		int sellerID= sc.nextInt();
+		try {
+			productService.addProduct(product,sellerID);
+		} catch (SellerNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

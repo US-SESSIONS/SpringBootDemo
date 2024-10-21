@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
+import com.ussessions.warehousemanagement.entity.SellerDetail;
 import com.ussessions.warehousemanagement.repository.ProductRepository;
+import com.ussessions.warehousemanagement.repository.SellerDetailRepository;
+import com.ussessions.warehousemanagement.service.exception.SellerNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -21,9 +24,18 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Override
-	public Integer addProduct(ProductDTO product) {
+	@Autowired
+	private SellerDetailRepository sellerDetailRepository;
 
+	@Override
+	@Transactional(rollbackOn = { SellerNotFoundException.class })
+	public Integer addProduct(ProductDTO product, Integer sellerId) throws SellerNotFoundException {
+//query db for the seller Info
+		Optional<SellerDetail> optSeller = sellerDetailRepository.findById(sellerId);
+		if (optSeller.isEmpty()) {
+			throw new SellerNotFoundException("Seller with seller id :" + sellerId + " not found");
+		}
+		SellerDetail sellerDetail = optSeller.get();
 		ProductDetail newProduct = new ProductDetail();
 
 		newProduct.setCategory(product.getCategory());
@@ -31,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 		newProduct.setManufacturingDate(product.getManDate());
 		newProduct.setProductName(product.getProductName());
 		newProduct.setAddedAt(LocalDateTime.now());
-
+		newProduct.setSeller(sellerDetail);
 		ProductDetail addededProduct = productRepository.save(newProduct);
 		return addededProduct.getProductId();
 
@@ -90,8 +102,8 @@ public class ProductServiceImpl implements ProductService {
 		// below method is used to do transaction based on method name apporach
 		// List<ProductDetail> products = productRepository.findByProductName(name);
 
-		
-		//below method is for doing transaction based on product name using the named query approach
+		// below method is for doing transaction based on product name using the named
+		// query approach
 		List<ProductDetail> products = productRepository.findByProdName(name);
 		// create List<ProductDTO>
 		List<ProductDTO> productDTOs = new ArrayList<ProductDTO>();
@@ -143,6 +155,13 @@ public class ProductServiceImpl implements ProductService {
 		// throw new RuntimeException("created exception to check the transcational
 		// behavior");
 		throw new Exception("created exception to check the transcational behavior");
+	//	System.out.println("just check");
+	}
+
+	@Override
+	public List<ProductDetail> findBySellerId(Integer sellerId) {
+
+		return productRepository.findBySellerSellerId(sellerId);
 	}
 
 }

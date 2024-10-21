@@ -66,5 +66,9 @@ public interface ProductRepository extends JpaRepository<ProductDetail, Integer>
 	
 	//above method is for the named query named paramterer approach
 	//this is for the named query positioanal parameter approach
+	
 	List<ProductDetail> findByProdName( String name);
+	
+	
+	List<ProductDetail> findBySellerSellerId(Integer sellerId);
 }
