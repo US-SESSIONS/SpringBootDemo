@@ -54,6 +54,8 @@ public interface ProductRepository extends JpaRepository<ProductDetail, Integer>
 //native query and positional paramter
 
 	@Query(value = "select * from product_details where exp_date < ?1", nativeQuery = true)
+	
+	
 	public List<ProductDetail> fetchBasedOnExpDatePositionalParam(LocalDate date);
 
 	@Query(value = "delete from product_details where p_id=?1", nativeQuery = true)
