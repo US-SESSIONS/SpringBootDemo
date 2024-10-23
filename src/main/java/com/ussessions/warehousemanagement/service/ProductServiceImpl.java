@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
 		newProduct.setManufacturingDate(product.getManDate());
 		newProduct.setProductName(product.getProductName());
 		newProduct.setAddedAt(LocalDateTime.now());
+		newProduct.setQuantity(product.getQuantity());
 		newProduct.setSeller(sellerDetail);
 		ProductDetail addededProduct = productRepository.save(newProduct);
 		return addededProduct.getProductId();

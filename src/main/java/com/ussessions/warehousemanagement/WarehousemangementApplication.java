@@ -38,7 +38,7 @@ public class WarehousemangementApplication implements CommandLineRunner {
 		// deleteProduct();
 		// searchProducts();
 		// searchByKeyword();
-		 findBySellerId();
+		 //findBySellerId();
 	}
 
 	private void findBySellerId() {
