@@ -1,5 +1,6 @@
 package com.ussessions.warehousemanagement;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,8 +9,12 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
@@ -19,6 +24,10 @@ import com.ussessions.warehousemanagement.service.ProductService;
 import com.ussessions.warehousemanagement.service.exception.SellerNotFoundException;
 
 @SpringBootApplication
+
+//@ComponentScan
+//@EnableAutoConfiguration
+//@Configuration
 public class WarehousemangementApplication implements CommandLineRunner {
 
 	@Autowired
@@ -154,7 +163,7 @@ public class WarehousemangementApplication implements CommandLineRunner {
 
 	}
 
-	private void addProduct() {
+	private void addProduct() throws IOException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("enter product Name");
 		String pname = sc.next();

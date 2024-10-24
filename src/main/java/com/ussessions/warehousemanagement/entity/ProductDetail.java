@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -42,6 +43,10 @@ public class ProductDetail {
 	@ManyToOne
 	@JoinColumn(name="seller_id")
 	private SellerDetail seller;
+	@Lob
+	private byte[] imageContent;
+	
+	private String filename;
 
 }
 //primary key generation startagies

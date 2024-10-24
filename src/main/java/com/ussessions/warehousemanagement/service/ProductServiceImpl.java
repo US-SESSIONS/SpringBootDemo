@@ -1,5 +1,6 @@
 package com.ussessions.warehousemanagement.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional(rollbackOn = { SellerNotFoundException.class })
-	public Integer addProduct(ProductDTO product, Integer sellerId) throws SellerNotFoundException {
+	public Integer addProduct(ProductDTO product, Integer sellerId) throws SellerNotFoundException, IOException {
 //query db for the seller Info
 		Optional<SellerDetail> optSeller = sellerDetailRepository.findById(sellerId);
 		if (optSeller.isEmpty()) {
@@ -45,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
 		newProduct.setAddedAt(LocalDateTime.now());
 		newProduct.setQuantity(product.getQuantity());
 		newProduct.setSeller(sellerDetail);
+		//product.setImage(null);
+		if(product.getImage()!=null) {
+			newProduct.setFilename(product.getImage().getOriginalFilename());
+			newProduct.setImageContent(product.getImage().getBytes());
+		}
 		ProductDetail addededProduct = productRepository.save(newProduct);
 		return addededProduct.getProductId();
 
@@ -156,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
 		// throw new RuntimeException("created exception to check the transcational
 		// behavior");
 		throw new Exception("created exception to check the transcational behavior");
-	//	System.out.println("just check");
+		// System.out.println("just check");
 	}
 
 	@Override

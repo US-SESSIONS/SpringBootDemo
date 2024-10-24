@@ -3,14 +3,32 @@ package com.ussessions.warehousemanagement.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.Data;
+@Data
+@Valid
 public class ProductDTO {
+	
 	private Integer pId;
+	
+	@NotNull(message="quantity cannot be null")
 	private Integer quantity;
+	
+	@NotNull(message="product name is mandatory")
+	
 	private String productName;
 	private String category;
 	private LocalDate manDate;
 	private LocalDate expDate;
 	private LocalDateTime addedAt;
+	
+	private MultipartFile image;
+	
+	
 	public String getProductName() {
 		return productName;
 	}

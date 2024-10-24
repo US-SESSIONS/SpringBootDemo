@@ -1,5 +1,6 @@
 package com.ussessions.warehousemanagement.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.ussessions.warehousemanagement.dto.ProductDTO;
@@ -7,7 +8,7 @@ import com.ussessions.warehousemanagement.entity.ProductDetail;
 import com.ussessions.warehousemanagement.service.exception.SellerNotFoundException;
 
 public interface ProductService {
-	public Integer addProduct(ProductDTO product,Integer sellerId) throws SellerNotFoundException;
+	public Integer addProduct(ProductDTO product,Integer sellerId) throws SellerNotFoundException, IOException;
 
 	public ProductDetail findProduct(Integer productId) throws Exception;
 

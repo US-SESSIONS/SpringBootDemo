@@ -1,13 +1,20 @@
 package com.ussessions.warehousemanagement.controller;
 
+import java.io.IOException;
+import java.net.Authenticator.RequestorType;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ussessions.warehousemanagement.dto.ProductDTO;
 import com.ussessions.warehousemanagement.entity.ProductDetail;
@@ -24,7 +33,14 @@ import com.ussessions.warehousemanagement.service.exception.SellerNotFoundExcept
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 
-@Controller
+//@Controller
+//@ResponseBody
+
+@RestController
+@RequestMapping(value="product")
+@Validated
+
+//http://ip:port/product/
 public class ProductController {
 
 	@Autowired
@@ -38,7 +54,7 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "hello123", method = RequestMethod.GET)
-	@ResponseBody
+	//@ResponseBody
 	public ProductDetail check() {
 		return new ProductDetail();
 	}
@@ -46,7 +62,7 @@ public class ProductController {
 	// pathVariable demo
 	// @RequestMapping(value = "sarch/{keyword}", method = RequestMethod.GET)
 	@GetMapping(value = "search/{keyword1}")
-	@ResponseBody
+	//@ResponseBody
 	// public List<ProductDTO> searchProducts(@PathVariable(name = "keyword") String
 	// keyword) {
 
@@ -57,8 +73,8 @@ public class ProductController {
 	}
 
 	// @RequestParam approach
-	@GetMapping(value = "/product/productId")
-	@ResponseBody
+	@GetMapping(value = "/productId")
+	//@ResponseBody
 	public ProductDetail findProduct(@RequestParam(name = "productId", required = true) Integer productId)
 			throws Exception {
 		System.out.println("product in the request " + productId);
@@ -66,25 +82,27 @@ public class ProductController {
 		return searchResults;
 	}
 
-	@PostMapping(value = "/product/add-product")
-	@ResponseBody
-	public String addProduct(@RequestBody ProductDTO productDTO, @RequestParam(name = "sellerId") Integer sellerId)
-			throws SellerNotFoundException {
+	@PostMapping(value = "/add-product")
+	//@ResponseBody
+	// public String addProduct(@RequestBody @Valid ProductDTO productDTO,
+	//@RequestParam(name = "sellerId") Integer sellerId)
+	public String addProduct(@ModelAttribute @Valid ProductDTO productDTO, @RequestParam(name = "sellerId") Integer sellerId)
+			throws SellerNotFoundException, IOException {
 		System.out.println("product dto from request " + productDTO);
 		System.out.println("seller id from request " + sellerId);
 		Integer id = productService.addProduct(productDTO, sellerId);
 		return "Product added sucessfully with productId :" + id;
 	}
 
-	@DeleteMapping(value = "product/delete")
-	@ResponseBody
+	@DeleteMapping(value = "/delete")
+	//@ResponseBody
 	public String deleteProduct(@RequestParam(name = "pId") Integer productId) throws Exception {
 		productService.deleteProduct(productId);
 		return "product deleted successfully with produtId " + productId;
 	}
 
-	@PutMapping(value = "product/update/{productId}")
-	@ResponseBody
+	@PutMapping(value = "/update/{productId}")
+	//@ResponseBody
 	public ResponseEntity<String> updateProductQuantity(@PathVariable Integer productId,
 			@RequestParam(name = "qty") Integer quantity) throws Exception {
 		Integer updatedValue = productService.updateProduct(productId, quantity);
@@ -92,4 +110,20 @@ public class ProductController {
 				"product quantity updated successfully with quantity " + quantity + " productId" + productId,
 				HttpStatus.CREATED);
 	}
+
+	@PostMapping(value = "upload-file")
+	//@ResponseBody
+	public ResponseEntity<Byte[]> uploadFile(@RequestParam(name = "file") MultipartFile file) throws IOException {
+		System.out.println("uploaded file name " + file.getOriginalFilename());
+
+		Byte[] fileIntoBinary = new Byte[file.getBytes().length];
+		int i = 0;
+		for (byte b : file.getBytes()) {
+			fileIntoBinary[i] = b;
+			i++;
+		}
+		return new ResponseEntity<Byte[]>(fileIntoBinary, HttpStatus.ACCEPTED);
+
+	}
+
 }
