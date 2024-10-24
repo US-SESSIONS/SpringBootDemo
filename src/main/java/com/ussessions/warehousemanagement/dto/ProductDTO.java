@@ -3,11 +3,12 @@ package com.ussessions.warehousemanagement.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 @Data
 @Valid
